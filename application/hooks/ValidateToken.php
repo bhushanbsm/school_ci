@@ -23,7 +23,7 @@ class ValidateToken
             $token = $temp[1];
 
             $CI->load->helper('authorization');
-            $decodedToken = AUTHORIZATION::validateTimestamp($token);
+            $decodedToken = AUTHORIZATION::validateToken($token);
             if ($decodedToken != false) {
                 return true;
             }
