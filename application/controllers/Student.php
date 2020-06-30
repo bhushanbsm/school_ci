@@ -79,7 +79,7 @@ class Student extends REST_Controller {
         $this->form_validation->set_rules('category', 'Category', 'trim|required|alpha');
         $this->form_validation->set_rules('caste', 'Caste', 'trim|required|alpha');
         $this->form_validation->set_rules('sub_caste', 'Sub-Class', 'trim|alpha');
-        $this->form_validation->set_rules('aadhar', 'Aadhar No.', 'trim|required|regex_match[/[0-9]{14}/]');
+        $this->form_validation->set_rules('aadhar', 'Aadhar No.', 'trim|required|regex_match[/[0-9]{12}/]');
         $this->form_validation->set_rules('mobile1', 'Mobile No. 1', 'trim|regex_match[/[0-9]{10}/]');
         $this->form_validation->set_rules('mobile2', 'Mobile No. 2', 'trim');
         $this->form_validation->set_rules('per_address', 'Permanant Address', 'trim|required');
@@ -136,7 +136,7 @@ class Student extends REST_Controller {
         $this->form_validation->set_rules('category', 'Category', 'trim|required|alpha');
         $this->form_validation->set_rules('caste', 'Caste', 'trim|required|alpha');
         $this->form_validation->set_rules('sub_caste', 'Sub-Class', 'trim|alpha');
-        $this->form_validation->set_rules('aadhar', 'Aadhar No.', 'trim|required|regex_match[/[0-9]{14}/]');
+        $this->form_validation->set_rules('aadhar', 'Aadhar No.', 'trim|required|regex_match[/[0-9]{12}/]');
         $this->form_validation->set_rules('mobile1', 'Mobile No. 1', 'trim|regex_match[/[0-9]{10}/]');
         $this->form_validation->set_rules('mobile2', 'Mobile No. 2', 'trim');
         $this->form_validation->set_rules('per_address', 'Permanant Address', 'trim|required');
