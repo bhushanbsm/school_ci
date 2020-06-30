@@ -65,4 +65,16 @@ class Fees extends REST_Controller {
             $this->set_response(['status' => 200, 'data' => ['receipt' => $receipt]], REST_Controller::HTTP_OK);
         }
     }
+
+    public function feeDetails_get($session_id  = "", $id = '')
+    {
+        if (empty($id) || empty($session_id)) {
+            $this->set_response(['status' => 400, 'error' => ["Select Student and Session"]], REST_Controller::HTTP_OK);
+            return;
+        }
+        $this->load->model('Fees_model');
+        $data['feeDetails'] = $this->Fees_model->getFeeDetails($session_id,$id);
+        $data['feeDetails']['months'] = explode(",", $data['feeDetails']['months']);
+        $this->set_response(['status' => 200, 'data' => $data], REST_Controller::HTTP_OK);
+    }
 }

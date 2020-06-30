@@ -42,6 +42,7 @@ class Student extends REST_Controller {
         }
         $this->load->model('Student_model');
         $data['student'] = $this->Student_model->getStudent($id);
+        $data['student']['photo'] = base_url('uploads/photos/' . $data['student']['photo']);
         $this->set_response(['status' => 200, 'data' => $data], REST_Controller::HTTP_OK);
     }
 

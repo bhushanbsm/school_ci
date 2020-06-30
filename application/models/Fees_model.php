@@ -50,6 +50,19 @@ class Fees_model extends CI_Model {
         return $this->db->get('receipts')->row_array();
     }
 
+    public function getFeeDetails($session_id,$id)
+    {
+        if (empty($id) || empty($session_id)) {
+            return [];
+        }
+        $this->db->select('students.fname,students.lname,sessions.year,fees.*')
+        ->join('students', 'students.id = fees.student_id', 'inner')
+        ->join('sessions', 'sessions.id = fees.session_id', 'inner')
+        ->where('fees.student_id', $id)
+        ->where('fees.session_id', $session_id);
+        return $this->db->get('fees')->row_array();
+    }
+
     public function add($data='')
     {
         $admission = 0;
