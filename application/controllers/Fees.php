@@ -20,6 +20,15 @@ class Fees extends REST_Controller {
     * @see https://codeigniter.com/user_guide/general/urls.html
     */
 
+    var $feeHeads = [
+        [ 'id'=> 1, 'name'=> 'Admission', 'field'=> 'admission' ],
+        [ 'id'=> 2, 'name'=> 'Exam' , 'field'=> 'exam' ],
+        [ 'id'=> 3, 'name'=> 'Computer' , 'field'=> 'computer' ],
+        [ 'id'=> 4, 'name'=> 'E-class' , 'field'=> 'e_class' ],
+        [ 'id'=> 5, 'name'=> 'Other' , 'field'=> 'other' ],
+        [ 'id'=> 6, 'name'=> 'Late Fees' , 'field'=> 'late' ],
+    ];
+
     public function payfees_post()
     {
         if (empty($this->input->post())) {
@@ -39,14 +48,6 @@ class Fees extends REST_Controller {
             $this->set_response(['status' => 400, 'error' => $this->form_validation->error_array()], REST_Controller::HTTP_OK);
             return;
         } else {
-            $feeHeads = [
-               [ 'id'=> 1, 'name'=> 'Admission', 'field'=> 'admission' ],
-               [ 'id'=> 2, 'name'=> 'Exam' , 'field'=> 'exam' ],
-               [ 'id'=> 3, 'name'=> 'Computer' , 'field'=> 'computer' ],
-               [ 'id'=> 4, 'name'=> 'E-class' , 'field'=> 'e_class' ],
-               [ 'id'=> 5, 'name'=> 'Other' , 'field'=> 'other' ],
-               [ 'id'=> 6, 'name'=> 'Late Fees' , 'field'=> 'late' ],
-            ];
             $data = $this->input->post();
 
             if (in_array(1, explode(',',$data['feeHead']))) {

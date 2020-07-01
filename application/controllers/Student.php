@@ -25,23 +25,21 @@ class Student extends REST_Controller {
         if (empty($class)) {
             $this->set_response(['status' => 400, 'error' => "Select Class"], REST_Controller::HTTP_OK);
             return;
-            // echo json_encode(['status' => 400, 'error' => "Select Class"]);
         }
         $this->load->model('Student_model');
         $data['count'] = $this->Student_model->getGenderCount($session, $class);
         $data['students'] = $this->Student_model->getStudents($session, $class);
         $this->set_response(['status' => 200, 'data' => $data], REST_Controller::HTTP_OK);
-        // echo json_encode(['status' => 200, 'data' => $data]);
     }
 
-    public function student_get($id = '')
+    public function student_get($admission_no = '')
     {
-        if (empty($id)) {
+        if (empty($admission_no)) {
             $this->set_response(['status' => 400, 'error' => ["Select Student"]], REST_Controller::HTTP_OK);
             return;
         }
         $this->load->model('Student_model');
-        $data['student'] = $this->Student_model->getStudent($id);
+        $data['student'] = $this->Student_model->getStudent($admission_no);
         $data['student']['photo'] = base_url('uploads/photos/' . $data['student']['photo']);
         $this->set_response(['status' => 200, 'data' => $data], REST_Controller::HTTP_OK);
     }
@@ -61,6 +59,8 @@ class Student extends REST_Controller {
 
         $this->form_validation->set_rules('session', 'Session', 'trim|required|integer');
         $this->form_validation->set_rules('class', 'Class', 'trim|required|integer');
+        $this->form_validation->set_rules('admission_no', 'Admission No.', 'trim|required');
+        $this->form_validation->set_rules('admission_date', 'Admission Date', 'trim|required');
         $this->form_validation->set_rules('student_fname', 'Student First Name', 'trim|required|alpha');
         $this->form_validation->set_rules('student_mname', 'Student Middle Name', 'trim|required');
         $this->form_validation->set_rules('student_lname', 'Student Last Name', 'trim|required|alpha');
@@ -87,7 +87,6 @@ class Student extends REST_Controller {
 
         if ($this->form_validation->run() === FALSE) {
             $this->set_response(['status' => 400, 'error' => $this->form_validation->error_array()], REST_Controller::HTTP_OK);
-            // echo json_encode(['status' => 400, 'error' => $this->form_validation->error_array()]);
             return;
         } else {
             $data = $this->input->post();
@@ -95,14 +94,12 @@ class Student extends REST_Controller {
 
             if ($data['photo'] == false) {
                 $this->set_response(['status' => 400, 'error' => ['Error in Photo upload.']], REST_Controller::HTTP_OK);
-                // echo json_encode(['status' => 400, 'error' => ['Error in Photo upload.']]);
                 return;
             }
 
             $this->load->model('Student_model');
             $id = $this->Student_model->add($data);
             $this->set_response(['status' => 200, 'data' => ['id' => $id]], REST_Controller::HTTP_OK);
-            // echo json_encode(['status' => 200, 'data' => ['id' => $id]]);
         }
     }
 
@@ -118,6 +115,8 @@ class Student extends REST_Controller {
 
         $this->form_validation->set_rules('session', 'Session', 'trim|required|integer');
         $this->form_validation->set_rules('class', 'Class', 'trim|required|integer');
+        $this->form_validation->set_rules('admission_no', 'Admission No.', 'trim|required');
+        $this->form_validation->set_rules('admission_date', 'Admission Date', 'trim|required');
         $this->form_validation->set_rules('student_fname', 'Student First Name', 'trim|required|alpha');
         $this->form_validation->set_rules('student_mname', 'Student Middle Name', 'trim|required');
         $this->form_validation->set_rules('student_lname', 'Student Last Name', 'trim|required|alpha');

@@ -6,6 +6,8 @@ class Student_model extends CI_Model {
     public $dbCols = array(
         'session' => 'session_id',
         'class' => 'class_id',
+        'admission_no' => 'admission_no',
+        'admission_date' => 'admission_date',
         'student_fname' => 'fname',
         'student_mname' => 'mname',
         'student_lname' => 'lname',
@@ -46,7 +48,11 @@ class Student_model extends CI_Model {
         $this->db->select("id");
         $this->db->select("concat_ws(' ', fname, lname) AS name");
         foreach ($this->dbCols as $uiCol => $dbCol) {
-            $this->db->select($dbCol . " AS " . $uiCol);
+            if (in_array($dbCol, ['admission_date','dob'])) {
+                $this->db->select("DATE_FORMAT($dbCol,'%d-%m-%Y') AS " . $uiCol);
+            } else {
+                $this->db->select($dbCol . " AS " . $uiCol);
+            }
         }
         if (is_array($class)) {
             $this->db->where_in('class_id', $class);
@@ -57,27 +63,30 @@ class Student_model extends CI_Model {
         }
     }
 
-    public function getStudent($id='')
+    public function getStudent($admission_no='')
     {
-        if (empty($id)) {
+        if (empty($admission_no)) {
             return [];
         }
         $this->db->select("id");
+        $this->db->select("concat_ws(' ', fname, lname) AS name");
         foreach ($this->dbCols as $uiCol => $dbCol) {
-            $this->db->select($dbCol . " AS " . $uiCol);
+            if (in_array($dbCol, ['admission_date','dob'])) {
+                $this->db->select("DATE_FORMAT($dbCol,'%d-%m-%Y') AS " . $uiCol);
+            } else {
+                $this->db->select($dbCol . " AS " . $uiCol);
+            }
         }
-        return $this->db->get_where($this->table,array('id' => $id))->row_array();
+        return $this->db->get_where($this->table,array('admission_no' => $admission_no))->row_array();
     }
 
     public function getGenderCount($session='1', $class='')
     {
         $this->db
-        // ->join('sessions', 'sessions.id = particulars.session_id', 'left')
         ->select('count(students.id) AS total')
         ->select('count(IF(students.gender = "Male", students.id,null)) AS male')
         ->select('count(IF(students.gender like "female", students.id,null)) AS female')
         ->select('count(IF(students.gender = "Transgender", students.id,null)) AS transgender');
-        // ->select('sessions.year');
         if (empty($class)) {
             return [];
         } else {
@@ -97,19 +106,24 @@ class Student_model extends CI_Model {
         foreach ($data as $formKey => $formValue) {
             $saveData[$this->dbCols[$formKey]] = ($formValue != 'null') ? $formValue: null;
         }
+        $saveData['dob'] = date('Y-m-d',strtotime($saveData['dob']));
+        $saveData['admission_date'] = date('Y-m-d',strtotime($saveData['admission_date']));
 
         $this->db->insert($this->table, $saveData);
         return $this->db->insert_id($this->table);
     }
 
-    public function update($id,$data='')
+    public function update($admission_no,$data='')
     {
         $saveData = array();
         foreach ($data as $formKey => $formValue) {
             $saveData[$this->dbCols[$formKey]] = ($formValue != 'null') ? $formValue: null;
         }
 
-        $this->db->update($this->table, $saveData, array('id' => $id));
+        $saveData['dob'] = date('Y-m-d',strtotime($saveData['dob']));
+        $saveData['admission_date'] = date('Y-m-d',strtotime($saveData['admission_date']));
+
+        $this->db->update($this->table, $saveData, array('admission_no' => $admission_no));
         return $this->db->insert_id($this->table);
     }
 
