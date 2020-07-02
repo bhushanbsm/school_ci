@@ -43,7 +43,8 @@ class Fees_model extends CI_Model {
         if (empty($id)) {
             return [];
         }
-        $this->db->select('students.fname,students.lname,sessions.year,receipts.*')
+        $this->db->select('students.fname,students.lname,students.admission_no,sessions.year,receipts.*')
+        ->select("concat_ws(' ', students.fname, students.lname) AS name")
         ->join('students', 'students.id = receipts.student_id', 'inner')
         ->join('sessions', 'sessions.id = receipts.session_id', 'inner')
         ->where('receipts.id', $id);
@@ -55,7 +56,8 @@ class Fees_model extends CI_Model {
         if (empty($id) || empty($session_id)) {
             return [];
         }
-        $this->db->select('students.fname,students.lname,sessions.year,fees.*')
+        $this->db->select('students.fname,students.lname,students.admission_no,sessions.year,fees.*')
+        ->select("concat_ws(' ', students.fname, students.lname) AS name")
         ->join('students', 'students.id = fees.student_id', 'inner')
         ->join('sessions', 'sessions.id = fees.session_id', 'inner')
         ->where('fees.student_id', $id)
