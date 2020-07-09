@@ -27,4 +27,10 @@ class Particular_model extends CI_Model {
 		}
 	}
 
+	public function update($session,$data='')
+    {
+        $this->db->update($this->table, $data, array('session_id' => $session));
+        return $this->db->insert_id($this->table);
+    }
+
 }

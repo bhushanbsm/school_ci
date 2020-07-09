@@ -78,4 +78,34 @@ class Fees extends REST_Controller {
         $data['feeDetails']['months'] = explode(",", $data['feeDetails']['months']);
         $this->set_response(['status' => 200, 'data' => $data], REST_Controller::HTTP_OK);
     }
+
+    public function updateParticulars_post()
+    {
+        $data = json_decode($this->input->raw_input_stream, true);
+        if (empty($data)) {
+            $this->set_response(['status' => 400, 'error' => "Please provide fees data"], REST_Controller::HTTP_OK);
+            return false;
+        }
+
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_data($data);
+        $this->form_validation->set_rules('session', 'Session', 'trim|required|integer');
+        $this->form_validation->set_rules('admission', 'admission', 'trim|required|integer');
+        $this->form_validation->set_rules('exam', 'Exam', 'trim|required|integer');
+        $this->form_validation->set_rules('computer', 'Computer', 'trim|required|integer');
+        $this->form_validation->set_rules('e_class', 'E-class', 'trim|required|integer');
+        $this->form_validation->set_rules('other', 'Other', 'trim|required|integer');
+
+        if ($this->form_validation->run() === FALSE) {
+            $this->set_response(['status' => 400, 'error' => $this->form_validation->error_array()], REST_Controller::HTTP_OK);
+            return;
+        } else {
+            $session = $data['session'];
+            unset($data['session']);
+            $this->load->model('Particular_model');
+            $id = $this->Particular_model->update($session,$data);
+            $this->set_response(['status' => 200, 'data' => ['id' => $id]], REST_Controller::HTTP_OK);
+        }
+    }
 }

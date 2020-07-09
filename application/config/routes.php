@@ -61,3 +61,4 @@ $route['student/(:num)'] = 'student/student/$1';
 $route['feedetails/(:num)/(:num)'] = 'fees/feedetails/$1/$2';
 $route['authenticate'] = 'User/authenticate';
 $route['payfees'] = 'fees/payfees';
+$route['updateParticulars'] = 'fees/updateParticulars';
